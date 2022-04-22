@@ -16,6 +16,8 @@ public class Puppet extends Actor
   private boolean isAuto;
   private String puppetName;
   private PlayerStats playerStats;
+  private boolean rolledLow;
+  private int stepsTaken;
 
   Puppet(GamePane gp, NavigationPane np, String puppetImage)
   {
@@ -97,7 +99,8 @@ public class Puppet extends Actor
     }
 
     // Animation: Move on connection
-    if (currentCon != null)
+    if (currentCon != null && rolledLow == false)
+    // wont move a player who starts on a connection if they ended up there from a low roll
     {
       int x = gamePane.x(y, currentCon);
       setPixelLocation(new Point(x, y));
@@ -119,9 +122,11 @@ public class Puppet extends Actor
     }
 
     // Normal movement
+    stepsTaken = 0;
     if (nbSteps > 0)
     {
       moveToNextCell();
+      stepsTaken++;
 
       if (cellIndex == 100)  // Game over
       {
@@ -133,29 +138,40 @@ public class Puppet extends Actor
       nbSteps--;
       if (nbSteps == 0)
       {
+    	if (stepsTaken == navigationPane.diceCount) { //checks if the roll was the lowest possible
+    		rolledLow = true;
+    	}
+    	else {
+    		rolledLow = false;
+    	}
         // Check if on connection start
-        if ((currentCon = gamePane.getConnectionAt(getLocation())) != null)
-        {
-          gamePane.setSimulationPeriod(50);
-          y = gamePane.toPoint(currentCon.locStart).y;
-          if (currentCon.locEnd.y > currentCon.locStart.y) {
-        	playerStats.incrementDownTraversal();
-            dy = gamePane.animationStep;
+        if ((currentCon = gamePane.getConnectionAt(getLocation())) != null && stepsTaken != 0) {
+          if (rolledLow = true && currentCon.locEnd.y > currentCon.locStart.y) { //skips downward traversals on low rolls
+        	  setActEnabled(false);
+              navigationPane.prepareRoll(cellIndex);
           }
           else {
-        	playerStats.incrementUpTraversal();
-            dy = -gamePane.animationStep;
-          }
-          
-          if (currentCon instanceof Snake)
-          {
-            navigationPane.showStatus("Digesting...");
-            navigationPane.playSound(GGSound.MMM);
-          }
-          else
-          {
-            navigationPane.showStatus("Climbing...");
-            navigationPane.playSound(GGSound.BOING);
+	          gamePane.setSimulationPeriod(50);
+	          y = gamePane.toPoint(currentCon.locStart).y;
+	          if (currentCon.locEnd.y > currentCon.locStart.y) {
+	        	playerStats.incrementDownTraversal();
+	            dy = gamePane.animationStep;
+	          }
+	          else {
+	        	playerStats.incrementUpTraversal();
+	            dy = -gamePane.animationStep;
+	          }
+	          
+	          if (currentCon instanceof Snake)
+	          {
+	            navigationPane.showStatus("Digesting...");
+	            navigationPane.playSound(GGSound.MMM);
+	          }
+	          else
+	          {
+	            navigationPane.showStatus("Climbing...");
+	            navigationPane.playSound(GGSound.BOING);
+	          }
           }
         }
         else
