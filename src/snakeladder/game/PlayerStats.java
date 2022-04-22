@@ -38,7 +38,7 @@ public class PlayerStats
         }
         System.out.println(rollsList.get(rollsList.size()-1));
     	
-        System.out.print(puppet.getPuppetName()+" traversed: "+ "up-"+upTraversal+", down-"+downTraversal);
+        System.out.print(puppet.getPuppetName()+" traversed: "+ "up-"+upTraversal+", down-"+downTraversal+"\n");
     	
     }
 }
