@@ -325,6 +325,7 @@ public class NavigationPane extends GameGrid
   private void roll(int rollNumber)
   {
     int nb = rollNumber;
+    String rolls = "";
     for (int i=0; i < diceCount; i++) { // roll for multiple dice
     	if (rollNumber == RANDOM_ROLL_TAG) {
     		nb = ServicesRandom.get().nextInt(6) + 1;
@@ -336,8 +337,15 @@ public class NavigationPane extends GameGrid
     	removeActors(Die.class);
     	Die die = new Die(nb, totalPips, this);
     	addActor(die, dieBoardLocation);
+    	
+    	if(i<diceCount-1) {
+    		rolls = rolls+nb+"-";
+    	}
     }
     totalPips = 0;
+    
+    rolls = rolls+nb;
+	gp.getPuppet().getStats().addRoll(rolls); // track dice rolls for stats
   }
 
   public void buttonPressed(GGButton btn)

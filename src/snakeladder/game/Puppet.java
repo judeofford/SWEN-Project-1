@@ -2,6 +2,7 @@ package snakeladder.game;
 
 import ch.aplu.jgamegrid.*;
 import java.awt.Point;
+import java.lang.Math;
 
 public class Puppet extends Actor
 {
@@ -14,12 +15,14 @@ public class Puppet extends Actor
   private int dy;
   private boolean isAuto;
   private String puppetName;
+  private PlayerStats playerStats;
 
   Puppet(GamePane gp, NavigationPane np, String puppetImage)
   {
     super(puppetImage);
     this.gamePane = gp;
     this.navigationPane = np;
+    playerStats = new PlayerStats(np,this); //Initialize player stats
   }
 
   public boolean isAuto() {
@@ -135,10 +138,15 @@ public class Puppet extends Actor
         {
           gamePane.setSimulationPeriod(50);
           y = gamePane.toPoint(currentCon.locStart).y;
-          if (currentCon.locEnd.y > currentCon.locStart.y)
+          if (currentCon.locEnd.y > currentCon.locStart.y) {
+        	playerStats.incrementDownTraversal();
             dy = gamePane.animationStep;
-          else
+          }
+          else {
+        	playerStats.incrementUpTraversal();
             dy = -gamePane.animationStep;
+          }
+          
           if (currentCon instanceof Snake)
           {
             navigationPane.showStatus("Digesting...");
@@ -157,6 +165,10 @@ public class Puppet extends Actor
         }
       }
     }
+  }
+  
+  public PlayerStats getStats() {
+	  return playerStats;
   }
 
 }
