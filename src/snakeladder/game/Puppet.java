@@ -85,6 +85,27 @@ public class Puppet extends Actor
     cellIndex++;
   }
 
+  private void moveToPrevCell()
+  {
+    int tens = (cellIndex-1) / 10;
+    int ones = cellIndex - tens * 10;
+    if (tens % 2 == 0) 
+    {
+      if (ones == 1 && cellIndex > 0)
+        setLocation(new Location(getX(), getY() + 1));
+      else
+        setLocation(new Location(getX() - 1, getY()));
+    }
+    else
+    {
+      if (ones == 1)
+        setLocation(new Location(getX(), getY() + 1));
+      else
+        setLocation(new Location(getX() + 1, getY()));
+    }
+    cellIndex--;
+  }
+  
   public void act()
   {
     if ((cellIndex / 10) % 2 == 0)
@@ -146,33 +167,29 @@ public class Puppet extends Actor
     	}
         // Check if on connection start
         if ((currentCon = gamePane.getConnectionAt(getLocation())) != null && stepsTaken != 0) {
-          if (rolledLow = true && currentCon.locEnd.y > currentCon.locStart.y) { //skips downward traversals on low rolls
-        	  setActEnabled(false);
-              navigationPane.prepareRoll(cellIndex);
-          }
-          else {
-	          gamePane.setSimulationPeriod(50);
-	          y = gamePane.toPoint(currentCon.locStart).y;
-	          if (currentCon.locEnd.y > currentCon.locStart.y) {
-	        	playerStats.incrementDownTraversal();
-	            dy = gamePane.animationStep;
-	          }
-	          else {
-	        	playerStats.incrementUpTraversal();
-	            dy = -gamePane.animationStep;
-	          }
-	          
-	          if (currentCon instanceof Snake)
-	          {
-	            navigationPane.showStatus("Digesting...");
-	            navigationPane.playSound(GGSound.MMM);
-	          }
-	          else
-	          {
-	            navigationPane.showStatus("Climbing...");
-	            navigationPane.playSound(GGSound.BOING);
-	          }
-          }
+          useConnection(rolledLow);
+        }
+        else
+        {
+          setActEnabled(false);
+          navigationPane.collisionCheck(); //Check for collision after dice roll
+          navigationPane.prepareRoll(cellIndex);
+        }
+      }
+    }
+    
+    //Logic for moving backwards
+    if (nbSteps < 0)
+    {
+      moveToPrevCell();
+      nbSteps++;
+    
+      if (nbSteps == 0)
+      {
+        // Check if on connection start
+    	if ((currentCon = gamePane.getConnectionAt(getLocation())) != null)
+        {
+    		useConnection(false);
         }
         else
         {
@@ -181,6 +198,38 @@ public class Puppet extends Actor
         }
       }
     }
+  }
+  
+  //Player lands on a connection
+  private void useConnection(boolean rolledLow) {
+	  if (rolledLow = true && currentCon.locEnd.y > currentCon.locStart.y) { //skips downward traversals on low rolls
+    	  setActEnabled(false);
+    	  navigationPane.collisionCheck(); //Check for collision after dice roll
+          navigationPane.prepareRoll(cellIndex);
+      }
+      else {
+          gamePane.setSimulationPeriod(50);
+          y = gamePane.toPoint(currentCon.locStart).y;
+          if (currentCon.locEnd.y > currentCon.locStart.y) {
+        	playerStats.incrementDownTraversal();
+            dy = gamePane.animationStep;
+          }
+          else {
+        	playerStats.incrementUpTraversal();
+            dy = -gamePane.animationStep;
+          }
+          
+          if (currentCon instanceof Snake)
+          {
+            navigationPane.showStatus("Digesting...");
+            navigationPane.playSound(GGSound.MMM);
+          }
+          else
+          {
+            navigationPane.showStatus("Climbing...");
+            navigationPane.playSound(GGSound.BOING);
+          }
+      }
   }
   
   public PlayerStats getStats() {

@@ -359,4 +359,21 @@ public class NavigationPane extends GameGrid
   public void checkAuto() {
     if (isAuto) Monitor.wakeUp();
   }
+  
+  public void collisionCheck() {
+	  Puppet currentPuppet = gp.getPuppet();
+	  ArrayList<Puppet> allPuppets = new ArrayList<Puppet>(gp.getAllPuppets());
+	  
+	  //Loop through all puppets
+	  //check if it's on the same sqaure as the current puppet
+	  //Move puppet back one square
+	  for(int i=0; i<allPuppets.size(); i++) {
+		  Puppet puppet = allPuppets.get(i);
+		  if(puppet!=currentPuppet) {
+			  if(puppet.getCellIndex()==currentPuppet.getCellIndex()) {
+				  puppet.go(-1);
+			  }
+		  }
+	  }
+  }
 }
