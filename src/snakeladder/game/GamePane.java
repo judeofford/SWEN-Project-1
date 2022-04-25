@@ -129,5 +129,11 @@ public class GamePane extends GameGrid
     double b = (double)(y1 * x0 - y0 * x1) / (y1 - y0);
     return (int)(a * y + b);
   }
+  
+  public void flipAllConnections() {
+	  for(int i=0; i<connections.size();i++) {
+		  connections.get(i).flip();
+	  }
+  }
 
 }

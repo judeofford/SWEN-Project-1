@@ -15,6 +15,7 @@ public abstract class Connection
     this.cellEnd = cellEnd;
     locStart = GamePane.cellToLocation(cellStart);
     locEnd = GamePane.cellToLocation(cellEnd);
+  
   }
 
   String imagePath;
@@ -40,5 +41,14 @@ public abstract class Connection
   }
   public double yLocationPercent(int locationCell) {
     return (double) locationCell / GamePane.NUMBER_VERTICAL_CELLS;
+  }
+  
+  public void flip() {
+	  int temp=cellStart;
+	  cellStart=cellEnd;
+	  cellEnd=temp;
+	  
+	  locStart = GamePane.cellToLocation(cellStart);
+	  locEnd = GamePane.cellToLocation(cellEnd);
   }
 }

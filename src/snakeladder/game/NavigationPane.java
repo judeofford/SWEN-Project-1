@@ -209,6 +209,7 @@ public class NavigationPane extends GameGrid
       @Override
       public void buttonChecked(GGCheckButton ggCheckButton, boolean checked) {
         isToggle = checked;
+        gp.flipAllConnections();
       }
     });
 
