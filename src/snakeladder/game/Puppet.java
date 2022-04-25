@@ -146,7 +146,6 @@ public class Puppet extends Actor
     }
 
     // Normal movement
-    stepsTaken = 0;
     if (nbSteps > 0)
     {
       moveToNextCell();
@@ -164,9 +163,11 @@ public class Puppet extends Actor
       {
     	if (stepsTaken == navigationPane.diceCount) { //checks if the roll was the lowest possible
     		rolledLow = true;
+    		System.out.println("rolled low\n");
     	}
     	else {
     		rolledLow = false;
+    		System.out.println("did not roll low\n");
     	}
     	hasCollided=false;
         // Check if on connection start
@@ -179,6 +180,7 @@ public class Puppet extends Actor
           navigationPane.collisionCheck(); //Check for collision after dice roll
           navigationPane.prepareRoll(cellIndex);
         }
+        stepsTaken = 0;
       }
     }
     
@@ -207,7 +209,8 @@ public class Puppet extends Actor
   
   //Player lands on a connection
   private void useConnection() {
-	  if (rolledLow = true && currentCon.locEnd.y > currentCon.locStart.y) { //skips downward traversals on low rolls
+	  if (rolledLow == true && currentCon.locEnd.y > currentCon.locStart.y) { //skips downward traversals on low rolls
+		  System.out.println("skipped because of low roll\n");
     	  setActEnabled(false);
     	  navigationPane.collisionCheck(); //Check for collision after dice roll
           navigationPane.prepareRoll(cellIndex);
@@ -218,10 +221,12 @@ public class Puppet extends Actor
           if (currentCon.locEnd.y > currentCon.locStart.y) {
         	playerStats.incrementDownTraversal();
             dy = gamePane.animationStep;
+            System.out.println("moving down\n");
           }
           else {
         	playerStats.incrementUpTraversal();
             dy = -gamePane.animationStep;
+            System.out.println("moving up\n");
           }
           
           if (currentCon instanceof Snake)
