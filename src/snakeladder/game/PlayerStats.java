@@ -20,7 +20,6 @@ public class PlayerStats
     
     public void addRoll(String rolls) {
     	rollsList.add(rolls);
-    	printStats();
     }
     
     public void incrementUpTraversal() {
@@ -31,7 +30,7 @@ public class PlayerStats
     	downTraversal++;
     }
     
-    private void printStats() {
+    public void printStats() {
         System.out.print(puppet.getPuppetName()+" rolled: ");
         for(int i=0; i<rollsList.size()-1;i++) {
         	System.out.print(rollsList.get(i)+", ");

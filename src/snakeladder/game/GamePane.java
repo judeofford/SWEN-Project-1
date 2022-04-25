@@ -135,5 +135,11 @@ public class GamePane extends GameGrid
 		  connections.get(i).flip();
 	  }
   }
+  
+  public void printAllStats() {
+	  for(int i=0; i<puppets.size();i++) {
+		  puppets.get(i).getStats().printStats();
+	  }
+  }
 
 }

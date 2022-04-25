@@ -28,6 +28,7 @@ public class FrameTutorial extends JFrame
       @Override
       public void finishGameWithResults(int winningPlayerIndex, List<String> playerCurrentPositions) {
        System.out.println("DO NOT CHANGE THIS LINE---WINNING INFORMATION: " + winningPlayerIndex + "-" + String.join(",", playerCurrentPositions));
+       gp.printAllStats();
       }
     });
 
