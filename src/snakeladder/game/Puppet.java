@@ -121,7 +121,7 @@ public class Puppet extends Actor
     }
 
     // Animation: Move on connection
-    if (currentCon != null && rolledLow == false)
+    if ((currentCon != null && rolledLow == false) || (currentCon != null && rolledLow == true && currentCon.locEnd.y < currentCon.locStart.y))
     // wont move a player who starts on a connection if they ended up there from a low roll
     {
       int x = gamePane.x(y, currentCon);
