@@ -17,6 +17,7 @@ public class Puppet extends Actor
   private String puppetName;
   private PlayerStats playerStats;
   private boolean rolledLow;
+  private boolean hasCollided;
   private int stepsTaken;
 
   Puppet(GamePane gp, NavigationPane np, String puppetImage)
@@ -137,7 +138,9 @@ public class Puppet extends Actor
         cellIndex = currentCon.cellEnd;
         setLocationOffset(new Point(0, 0));
         currentCon = null;
-        navigationPane.prepareRoll(cellIndex);
+        if(hasCollided==false){
+        	navigationPane.prepareRoll(cellIndex);
+        }
       }
       return;
     }
@@ -165,9 +168,10 @@ public class Puppet extends Actor
     	else {
     		rolledLow = false;
     	}
+    	hasCollided=false;
         // Check if on connection start
         if ((currentCon = gamePane.getConnectionAt(getLocation())) != null && stepsTaken != 0) {
-          useConnection(rolledLow);
+          useConnection();
         }
         else
         {
@@ -186,22 +190,23 @@ public class Puppet extends Actor
     
       if (nbSteps == 0)
       {
+    	rolledLow=false;
+    	hasCollided=true;
         // Check if on connection start
     	if ((currentCon = gamePane.getConnectionAt(getLocation())) != null)
         {
-    		useConnection(false);
+    		useConnection();
         }
         else
         {
           setActEnabled(false);
-          navigationPane.prepareRoll(cellIndex);
         }
       }
     }
   }
   
   //Player lands on a connection
-  private void useConnection(boolean rolledLow) {
+  private void useConnection() {
 	  if (rolledLow = true && currentCon.locEnd.y > currentCon.locStart.y) { //skips downward traversals on low rolls
     	  setActEnabled(false);
     	  navigationPane.collisionCheck(); //Check for collision after dice roll
