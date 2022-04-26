@@ -136,6 +136,33 @@ public class GamePane extends GameGrid
 	  }
   }
   
+  public void flipStrategy() {
+	  //Assume only 2 puppets and each puppet uses the same toggle strategy
+	  
+	  //Get opponent position
+	  int opponentIndex = (currentPuppetIndex + 1) % numberOfPlayers;
+	  int opponentCellIndex = puppets.get(opponentIndex).getCellIndex();
+	  
+	  //Count Number of upward and downward start paths from dice roll
+	  int upward=0;
+	  int downward=0;
+	  for(int i=np.diceCount;i<np.diceCount*6;i++) {
+		  Connection currentCon = getConnectionAt(cellToLocation(opponentCellIndex+i));
+		  if(currentCon!=null) {
+			  if(currentCon.locEnd.y > currentCon.locStart.y) {
+				  downward++;
+			  } else {
+				  upward++;
+			  }
+		  }
+	  }
+
+	  //Toggle if there is the same of more upward to downward start paths
+	  if(upward>=downward) {
+		  flipAllConnections();
+	  }
+  }
+  
   public void printAllStats() {
 	  for(int i=0; i<puppets.size();i++) {
 		  puppets.get(i).getStats().printStats();

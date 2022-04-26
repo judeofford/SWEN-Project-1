@@ -72,7 +72,7 @@ public class NavigationPane extends GameGrid
   private GGTextField scoreField;
   private boolean isAuto;
   private GGCheckButton autoChk;
-  private boolean isToggle = false;
+  public boolean isToggle = false;
   private GGCheckButton toggleCheck =
           new GGCheckButton("Toggle Mode", YELLOW, TRANSPARENT, isToggle);
   private int nbRolls = 0;
@@ -286,6 +286,7 @@ public class NavigationPane extends GameGrid
       showStatus("Done. Click the hand!");
       String result = gp.getPuppet().getPuppetName() + " - pos: " + currentIndex;
       showResult(result);
+      gp.flipStrategy(); //use flip strategy
       gp.switchToNextPuppet();
       // System.out.println("current puppet - auto: " + gp.getPuppet().getPuppetName() + "  " + gp.getPuppet().isAuto() );
 
