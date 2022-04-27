@@ -159,7 +159,7 @@ public class GamePane extends GameGrid
 
 	  //Toggle if there is the same of more upward to downward start paths
 	  if(upward>=downward) {
-		  flipAllConnections();
+		  np.flipToggleButton();
 	  }
   }
   

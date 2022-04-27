@@ -378,4 +378,10 @@ public class NavigationPane extends GameGrid
 		  }
 	  }
   }
+  
+  public void flipToggleButton() {
+	  isToggle=!isToggle;
+	  toggleCheck.setChecked(isToggle);
+	  gp.flipAllConnections();
+  }
 }
